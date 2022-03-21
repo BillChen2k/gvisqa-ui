@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "downlevelIteration": true,
+    "module": "es6",
+    "target": "es5",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "sourceMap": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@dataset/*": ["./src/dataset/*"],
+    }
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
