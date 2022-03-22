@@ -1,0 +1,29 @@
+
+.ele-table {
+  width: 100%;
+  padding-right: 6px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+
+  .split-row{
+    padding-top: 6px;
+    span:first-child {
+      font-weight: bold;
+    }
+    span:nth-child(2) {
+      float: right;
+      padding-right: 12px;
+    }
+  }
+
+  .array-row {
+    padding-top: 6px;
+    :first-child {
+      font-weight: bold;
+    }
+    :nth-child(2) {
+      text-align: left;
+      padding-left: 2rem;
+    }
+  }
+}

@@ -1,5 +1,17 @@
 import * as React from 'react';
-import {AppBar, Box, Button, Select, Toolbar, MenuItem, ThemeProvider, Typography, Grid, Card} from '@mui/material';
+import {
+  AppBar,
+  Box,
+  Button,
+  Select,
+  Toolbar,
+  MenuItem,
+  ThemeProvider,
+  Typography,
+  Grid,
+  Card,
+  Stack,
+} from '@mui/material';
 import config from '@/config';
 import {useAppDispatch, useAppSelector} from '@/app/hooks';
 import {siteSlice} from '@/store/siteSlice';
@@ -32,10 +44,30 @@ const Base = (props: IBaseProps) => {
     <Box>
       <Grid container spacing={2} sx={{height: 'calc(100vh - 48px)', pt: 2, px: 2}}>
         <Grid item xs={3}>
-          <Card variant={'outlined'} sx={{height: '100%'}} >
-            <Box p={2}>
-              <GraphElementInspector />
-            </Box>
+          <Card variant={'outlined'} sx={{height: '100%'}}>
+            <Stack direction={'column'} sx={{display: 'flex', height: '100%'}}>
+              <Stack p={2} spacing={1}>
+                <Typography variant={'h4'}>Lesmis</Typography>
+                <Typography variant={'body2'} sx={{color: 'gray'}}>Node: 20, Edges: 20, Directed.</Typography>
+                <Typography variant={'body1'} sx={{height: '60px'}}>This is a graph about the relationship from the novel Les Miserables.</Typography>
+              </Stack>
+              <Box px={2} sx={{overflowX: 'hidden', overflowY: 'scroll', height: 'calc(100vh - 300px)'}}>
+                <GraphElementInspector />
+                <GraphElementInspector />
+                <GraphElementInspector />
+                <GraphElementInspector />
+              </Box>
+              <Stack direction={'row'} sx={{m: 2}} spacing={2} justifyContent={'right'}>
+                <Button variant={'outlined'}>
+              Change Graph Configuration
+                </Button>
+                <Button variant={'outlined'}>
+              Load
+                </Button>
+              </Stack>
+            </Stack>
+
+
           </Card>
         </Grid>
         <Grid item xs={9}>

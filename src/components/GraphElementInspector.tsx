@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Box, Card, Grid, Typography} from '@mui/material';
-
+import {humanize} from 'inflected';
 export type IGraphElementType = 'node' | 'edge' | 'graph' | 'community';
 
 export interface IGraphElementInspectorProps {
@@ -15,7 +15,7 @@ const inspectorIcons = {
   graph: '/img/icon-graph.png',
 };
 
-const config = {
+const demoConfig = {
   semantic: 'Character',
   predicate_aliases: {
     link_with: [
@@ -29,24 +29,52 @@ const config = {
 };
 
 const GraphElementInspector = (props: IGraphElementInspectorProps) => {
+  const tableContents = [];
+  const config = props.config || demoConfig;
+  for (const key of Object.keys(config)) {
+    if (typeof config[key] === 'string') {
+      tableContents.push((
+        <div className={'split-row'}>
+          <span>{humanize(key)}</span>
+          <span>{humanize(config[key])}</span>
+        </div>
+      ));
+    }
+    if (key === 'predicate_aliases') {
+      for (const predicate of Object.keys(config[key])) {
+        tableContents.push((
+          <div className={'split-row'}>
+            <span>{humanize(predicate) + ' semantics'}</span>
+            <span></span>
+          </div>
+        ));
+        for (const value of config[key][predicate]) {
+          tableContents.push(
+              (<div className={'array-row'}>
+                <span></span>
+                <span>{humanize(value)}</span>
+              </div>),
+          );
+        }
+      }
+    }
+  }
+
   return (
-    <Card variant={'outlined'}>
+    <Card variant={'outlined'} sx={{mb: 2}}>
       <Grid container direction={'row'} spacing={2}>
-        <Grid item sx={{flex: '0 0 28px'}}>
+        <Grid item sx={{flex: '0 0 24px'}}>
           <Box sx={{pt: 1.5, pl: 1.5}}>
             <img src={'/img/icon-community.png'} alt={'Community'} width={'18px'}/>
           </Box>
         </Grid>
-        <Grid item sx={{flex: 1, mt: '5px'}}>
+        <Grid item sx={{flex: 1, mt: '6px'}}>
           <Typography variant={'h6'}>
             Community
           </Typography>
-          <table>
-            <tr>
-              <td>semantic</td>
-              <td>{config.semantic}</td>
-            </tr>
-          </table>
+          <div className={'ele-table'}>
+            {tableContents}
+          </div>
         </Grid>
       </Grid>
     </Card>
