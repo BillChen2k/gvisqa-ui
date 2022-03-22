@@ -1,13 +1,32 @@
 import {createTheme, SnackbarOrigin} from '@mui/material';
-import {blueGrey, cyan} from '@mui/material/colors';
+import {blueGrey, cyan, grey} from '@mui/material/colors';
 
 const config = {
   // MuiThemeProvider options
   theme: createTheme({
     palette: {
       mode: 'light',
-      primary: blueGrey,
-      secondary: cyan,
+      primary: {
+        main: grey[900],
+        light: grey[600],
+        dark: grey[900],
+      },
+      secondary: blueGrey,
+    },
+    typography: {
+      fontFamily: 'Roboto, Helvetica, -apple-system, Segoe UI, Helvetica Neue, Arial',
+      fontSize: 12,
+    },
+  }),
+  darkTheme: createTheme({
+    palette: {
+      mode: 'dark',
+      primary: {
+        main: grey[900],
+        light: grey[600],
+        dark: grey[900],
+      },
+      secondary: blueGrey,
     },
     typography: {
       fontFamily: 'Roboto, Helvetica, -apple-system, Segoe UI, Helvetica Neue, Arial',
