@@ -10,6 +10,7 @@
   },
   "private": false,
   "dependencies": {
+    "@antv/g6": "^4.6.4",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.2.0",

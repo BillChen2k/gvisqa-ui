@@ -22,8 +22,9 @@ module.exports = {
     'no-unused-vars': 'warn',
     'spaced-comment': 'warn',
     'valid-jsdoc': 'warn',
-    'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
+    'react-hooks/rules-of-hooks': 'error', // Check rules of Hooks
     'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
+    'camelcase': 'warn',
   },
   settings: {
     'import/resolver': {

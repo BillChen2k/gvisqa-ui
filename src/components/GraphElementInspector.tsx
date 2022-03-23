@@ -34,7 +34,7 @@ const GraphElementInspector = (props: IGraphElementInspectorProps) => {
   for (const key of Object.keys(config)) {
     if (typeof config[key] === 'string') {
       tableContents.push((
-        <div className={'split-row'}>
+        <div key={key} className={'split-row'}>
           <span>{humanize(key)}</span>
           <span>{humanize(config[key])}</span>
         </div>
@@ -43,14 +43,14 @@ const GraphElementInspector = (props: IGraphElementInspectorProps) => {
     if (key === 'predicate_aliases') {
       for (const predicate of Object.keys(config[key])) {
         tableContents.push((
-          <div className={'split-row'}>
+          <div key={predicate} className={'split-row'}>
             <span>{humanize(predicate) + ' semantics'}</span>
             <span></span>
           </div>
         ));
         for (const value of config[key][predicate]) {
           tableContents.push(
-              (<div className={'array-row'}>
+              (<div key={value} className={'array-row'}>
                 <span></span>
                 <span>{humanize(value)}</span>
               </div>),
@@ -65,12 +65,12 @@ const GraphElementInspector = (props: IGraphElementInspectorProps) => {
       <Grid container direction={'row'} spacing={2}>
         <Grid item sx={{flex: '0 0 24px'}}>
           <Box sx={{pt: 1.5, pl: 1.5}}>
-            <img src={'/img/icon-community.png'} alt={'Community'} width={'18px'}/>
+            <img src={inspectorIcons[props.type || 'node']} alt={'Community'} width={'18px'}/>
           </Box>
         </Grid>
         <Grid item sx={{flex: 1, mt: '6px'}}>
           <Typography variant={'h6'}>
-            Community
+            {humanize(props.type || 'node')}
           </Typography>
           <div className={'ele-table'}>
             {tableContents}

@@ -22,9 +22,9 @@ const config = {
     palette: {
       mode: 'dark',
       primary: {
-        main: grey[900],
+        main: grey[100],
         light: grey[600],
-        dark: grey[900],
+        dark: grey[100],
       },
       secondary: blueGrey,
     },
@@ -41,6 +41,7 @@ const config = {
       vertical: 'bottom',
       horizontal: 'right',
     } as SnackbarOrigin,
+    g6CoreHeight: 630,
   },
   API: '/api',
   map: {

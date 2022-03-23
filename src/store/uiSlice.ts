@@ -7,6 +7,11 @@ export interface OpenSnackbarPayload {
   severity?: SnackbarSeverity;
 };
 
+export interface OpenSimpleDialogPayload {
+  title: string,
+  message: string,
+};
+
 export interface IUIState {
   isLoading: boolean,
   loadingText: string,
@@ -15,6 +20,11 @@ export interface IUIState {
     message: string,
     severity: SnackbarSeverity,
   },
+  dialog: {
+    open: boolean,
+    title: string,
+    content: string,
+  }
 }
 
 const initialState: IUIState = {
@@ -24,6 +34,11 @@ const initialState: IUIState = {
     open: false,
     message: '',
     severity: 'info',
+  },
+  dialog: {
+    open: false,
+    title: '',
+    content: '',
   },
 };
 
@@ -40,6 +55,16 @@ export const uiSlice = createSlice({
     },
     dismissSnackbar(state: IUIState) {
       state.snackbar.open = false;
+    },
+    openSimpleDialog(state: IUIState, action: PayloadAction<OpenSimpleDialogPayload>) {
+      state.dialog = {
+        open: true,
+        title: action.payload.title,
+        content: action.payload.message,
+      };
+    },
+    dismissSimpleDialog(state: IUIState) {
+      state.dialog.open = false;
     },
     beginLoading(state: IUIState, action: PayloadAction<| string>) {
       state.isLoading = true;
