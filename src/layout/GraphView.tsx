@@ -8,12 +8,13 @@ import G6Core from '@/components/G6Core';
 import {humanize} from 'inflected';
 import config from '@/config';
 import TEInspector from '@/components/TEInspector';
+import ArgDataInspector from '@/components/ArgDataInspector';
 
-export interface IGraphViewProps {
+export interface IdivProps {
 
 }
 
-const GraphView = (props: IGraphViewProps) => {
+const div = (props: IdivProps) => {
   const dispatch = useAppDispatch();
   const {dataset, qares} = useAppSelector((state) => state.site);
 
@@ -33,7 +34,7 @@ const GraphView = (props: IGraphViewProps) => {
       });
       if (queryResult.length > 0) {
         dispatch(uiSlice.actions.openSnackbar({
-          message: `Answer generated.`,
+          message: `${queryResult[0].question}`,
           severity: 'success',
         }));
         dispatch(siteSlice.actions.setQARes(queryResult[0]));
@@ -61,7 +62,7 @@ const GraphView = (props: IGraphViewProps) => {
     <Card variant={'outlined'} sx={{height: '100%'}} >
       <CardContent>
         <Grid container spacing={2}>
-          <Grid item xs={9}>
+          <Grid item xs={8}>
             <FormControl fullWidth variant={'standard'}>
               <Input
                 onKeyUp={(e) => {
@@ -93,11 +94,10 @@ const GraphView = (props: IGraphViewProps) => {
             </FormControl>
             <Box sx={{height: config.appearance.g6CoreHeight}}>
               <G6Core/>
-
             </Box>
 
             {qares &&
-              <Card variant={'outlined'}>
+              <Card variant={'outlined'} sx={{pt: 1}}>
                 <CardContent>
                   <Typography variant={'body2'}>Our answer:</Typography>
                   <Typography variant={'h3'}>{humanize(qares.readable_answer)}</Typography>
@@ -113,8 +113,11 @@ const GraphView = (props: IGraphViewProps) => {
 
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <Box sx={{width: '100%', height: 'calc(100vh - 110px)', overflowY: 'auto'}}>
+              { qares && qares.arg_data.length > 0 &&
+                  <ArgDataInspector data={JSON.parse(JSON.stringify(qares.arg_data))} />
+              }
               { qares &&
                 qares.tes.map((te, index) => {
                   if (te.type == 'node' || te.type == 'community') {
@@ -130,4 +133,4 @@ const GraphView = (props: IGraphViewProps) => {
   );
 };
 
-export default GraphView;
+export default div;

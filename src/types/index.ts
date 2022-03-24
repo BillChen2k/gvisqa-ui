@@ -8,9 +8,10 @@ export interface IQAResult {
   id: string;
   question: string;
   answer: string[] | number[];
+  answer_type: string;
   highlight: IHighlight[];
   answer_properties: any[];
-  answer_type: string;
+  arg_data?: any[];
   readable_answer: string;
   cp: string; // Candidate Path
   query: string;

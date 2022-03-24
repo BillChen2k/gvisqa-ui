@@ -3,6 +3,7 @@ import {Box, Card, Grid, Typography} from '@mui/material';
 import inspectorIcons, {InspectorType} from '@/config/inspector';
 import {humanize} from 'inflected';
 import {useAppSelector} from '@/app/hooks';
+import G6MiniCommunity from '@/components/G6MiniCommunity';
 
 export interface ITEInspectorProps {
   type?: InspectorType;
@@ -31,13 +32,13 @@ const TEInspector = (props: ITEInspectorProps) => {
         tableContents.push(
             <div className={'split-row'}>
               <span>Community belongings</span>
-              <span>{dataset.graphjson.nodes[props.index].group - 1}</span>
+              <span>{dataset.graphjson.nodes[props.index].group}</span>
             </div>,
         );
-        ['degree', 'clustering', 'degree_centrality'].forEach((one) => {
+        ['degree', 'clustering', 'degree_centrality'].forEach((one, index) => {
           if (target[one]) {
             tableContents.push(
-                <div className={'split-row'}>
+                <div key={index} className={'split-row'}>
                   <span>{humanize(one)}</span>
                   <span>{Number(target[one]).toFixed(3)}</span>
                 </div>,
@@ -57,10 +58,10 @@ const TEInspector = (props: ITEInspectorProps) => {
               <span>{target.member_index.length}</span>
             </div>,
         );
-        ['average_degree', 'average_centrality', 'average_clustering'].forEach((one) => {
+        ['average_degree', 'average_centrality', 'average_clustering'].forEach((one, index) => {
           if (target[one]) {
             tableContents.push(
-                <div className={'split-row'}>
+                <div key={index} className={'split-row'}>
                   <span>{humanize(one)}</span>
                   <span>{Number(target[one]).toFixed(3)}</span>
                 </div>,
@@ -73,8 +74,8 @@ const TEInspector = (props: ITEInspectorProps) => {
               <span></span>
             </div>,
         );
-        target.member_names.forEach((one: string) => {
-          tableContents.push((<div className={'array-row'}>
+        target.member_names.forEach((one: string, index: number) => {
+          tableContents.push((<div key={index} className={'array-row'}>
             <span></span>
             <span>{one}</span>
           </div>));
@@ -107,11 +108,8 @@ const TEInspector = (props: ITEInspectorProps) => {
           <Typography variant={'h6'}>
             {humanize(title)}
           </Typography>
-          <Box ref={graphRef}/>
           {props.type == 'community' && (
-            <Typography variant={'body2'}>
-              {`Community ${props.index}`}
-            </Typography>
+            <G6MiniCommunity community={props.index} />
           )}
           <div className={'ele-table'}>
             {tableContents}

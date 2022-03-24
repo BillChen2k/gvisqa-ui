@@ -139,14 +139,6 @@ const G6Core = (props: IG6CoreProps) => {
   useEffect(() => {
     if (!gdata || !graph) return;
 
-    // Clear old highlights
-    const addNodeHighlight = (index: number) => {
-      const node = gdata.nodes[index];
-      node.size = 1.5 * nodeSize;
-      node.label = node.name;
-      graph.refresh();
-    };
-
     graph.getNodes().forEach((node: any) => {
       graph.setItemState(node, 'highlight', false);
     });
@@ -180,14 +172,13 @@ const G6Core = (props: IG6CoreProps) => {
 
   return (
     <Box sx={{position: 'relative'}}>
-      <Box ref={ref} sx={{height: `{GRAPH_WIDTH}px`, width: '100%', my: 2, position: 'absolute'}} />
+      <Box ref={ref} sx={{height: `{GRAPH_WIDTH}px`, width: '100%', py: 2, position: 'absolute'}} />
       <Box sx={{position: 'absolute', my: 2, width: '150px'}}>
         <Box>
           <FormControlLabel control={
             <Checkbox size={'small'} checked={showLabel} onChange={(e) => setShowLabel(e.target.checked)} />
           } label={'Show Label'} />
         </Box>
-
         <Typography variant="body2">Node Size ({nodeSize}):</Typography>
         <Slider size={'small'}
           value={nodeSize} min={2} max={30} onChange={(event, value) => setNodeSize(value as number)} />

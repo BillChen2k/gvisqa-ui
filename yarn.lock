@@ -17321,7 +17321,7 @@ vega-dataflow@^5.7.3, vega-dataflow@^5.7.4, vega-dataflow@~5.7.4:
     vega-loader "^4.3.2"
     vega-util "^1.16.1"
 
-vega-embed@^6.20.5, vega-embed@^6.5.1:
+vega-embed@^6.20.8, vega-embed@^6.5.1:
   version "6.20.8"
   resolved "https://registry.npmmirror.com/vega-embed/-/vega-embed-6.20.8.tgz#7fdd3ec1f39c9bf8b5fd610011d1622fecd7f96a"
   integrity sha512-UgUYJ9etuACULPwwy45Uw4Gz0sC4npxIn8yIW6dZsAu7EXMwEmeki+aA/9I9BVzD3EDD/TptG+ndlUTF2RW/Eg==
@@ -17433,6 +17433,11 @@ vega-label@~1.2.0:
     vega-dataflow "^5.7.3"
     vega-scenegraph "^4.9.2"
     vega-util "^1.15.2"
+
+vega-lite-api@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.npmmirror.com/vega-lite-api/-/vega-lite-api-5.0.0.tgz#2b4b26cc0e1ed9bd6debb671d962d762408a8d5a"
+  integrity sha512-rjNLkfOuBG1KTpIgQpX81LlGiqEb92lHlGiIuofs/EgntFVxD1REW18YKLpYdb1Mm7166zIOqNMdpchwjhstbQ==
 
 vega-lite@^5.2.0:
   version "5.2.0"
@@ -17632,7 +17637,7 @@ vega-wordcloud@~4.1.3:
     vega-statistics "^1.7.9"
     vega-util "^1.15.2"
 
-vega@^5.21.0:
+vega@^5.22.0:
   version "5.22.0"
   resolved "https://registry.npmmirror.com/vega/-/vega-5.22.0.tgz#9286832a0bc523ee39b1f3baff9a2ca1957a61f0"
   integrity sha512-ZIehKTrMY93sWaWIn/2N2LwsCN8XymQthxQA5fQwTmefVl7OOvcYmsGFJ9nttXUF4n0z5WRXkSsPZcJHHBlOKw==
