@@ -1759,7 +1759,13 @@
                 "1"
             ],
             "readable_answer": "1",
-            "highlight": {},
+            "highlight": {
+                "type": "node",
+                "node_index": [
+                    0,
+                    1
+                ]
+            },
             "answer_type": "literal",
             "cp": "m.edge@myranap edge.property.weight ?e1",
             "query": "SELECT ?e1 WHERE { m.edge@myranap edge.property.weight ?e1}",
@@ -4573,7 +4579,12 @@
                 "2"
             ],
             "readable_answer": "2",
-            "highlight": {},
+            "highlight": {
+                "type": "node",
+                "node_index": [
+                    12
+                ]
+            },
             "answer_type": "literal",
             "cp": "m.node@marguer node.property.degree ?e1",
             "query": "SELECT ?e1 WHERE { m.node@marguer node.property.degree ?e1}",
@@ -4593,7 +4604,12 @@
                 "0.3235294117647059"
             ],
             "readable_answer": "0.3235294117647059",
-            "highlight": {},
+            "highlight": {
+                "type": "node",
+                "node_index": [
+                    27
+                ]
+            },
             "answer_type": "literal",
             "cp": "m.node@javert node.property.clustering ?e1",
             "query": "SELECT ?e1 WHERE { m.node@javert node.property.clustering ?e1}",
@@ -4613,7 +4629,12 @@
                 "0.013157894736842105"
             ],
             "readable_answer": "0.013157894736842105",
-            "highlight": {},
+            "highlight": {
+                "type": "node",
+                "node_index": [
+                    32
+                ]
+            },
             "answer_type": "literal",
             "cp": "m.node@scauffl node.property.degree_centrality ?e1",
             "query": "SELECT ?e1 WHERE { m.node@scauffl node.property.degree_centrality ?e1}",
@@ -5143,7 +5164,13 @@
                 "1"
             ],
             "readable_answer": "1",
-            "highlight": {},
+            "highlight": {
+                "type": "node",
+                "node_index": [
+                    59,
+                    63
+                ]
+            },
             "answer_type": "literal",
             "cp": "m.edge@comabah edge.property.weight ?e1",
             "query": "SELECT ?e1 WHERE { m.edge@comabah edge.property.weight ?e1}",
@@ -6488,7 +6515,12 @@
                 "3"
             ],
             "readable_answer": "3",
-            "highlight": {},
+            "highlight": {
+                "type": "node",
+                "node_index": [
+                    2
+                ]
+            },
             "answer_type": "literal",
             "cp": "m.node@mllebap node.property.degree ?e1",
             "query": "SELECT ?e1 WHERE { m.node@mllebap node.property.degree ?e1}",
@@ -7251,7 +7283,12 @@
                 "0.07894736842105263"
             ],
             "readable_answer": "0.07894736842105263",
-            "highlight": {},
+            "highlight": {
+                "type": "node",
+                "node_index": [
+                    38
+                ]
+            },
             "answer_type": "literal",
             "cp": "m.node@cochepa node.property.importance ?e1",
             "query": "SELECT ?e1 WHERE { m.node@cochepa node.property.importance ?e1}",
@@ -7271,7 +7308,13 @@
                 "1"
             ],
             "readable_answer": "1",
-            "highlight": {},
+            "highlight": {
+                "type": "node",
+                "node_index": [
+                    11,
+                    12
+                ]
+            },
             "answer_type": "literal",
             "cp": "m.edge@valamar edge.property.importance ?e1",
             "query": "SELECT ?e1 WHERE { m.edge@valamar edge.property.importance ?e1}",
@@ -7302,7 +7345,13 @@
                 "1"
             ],
             "readable_answer": "1",
-            "highlight": {},
+            "highlight": {
+                "type": "node",
+                "node_index": [
+                    27,
+                    72
+                ]
+            },
             "answer_type": "literal",
             "cp": "m.edge@javatou edge.property.importance ?e1",
             "query": "SELECT ?e1 WHERE { m.edge@javatou edge.property.importance ?e1}",
@@ -7560,7 +7609,12 @@
                 "9"
             ],
             "readable_answer": "9",
-            "highlight": {},
+            "highlight": {
+                "type": "node",
+                "node_index": [
+                    60
+                ]
+            },
             "answer_type": "literal",
             "cp": "m.node@prouvai node.property.degree ?e1",
             "query": "SELECT ?e1 WHERE { m.node@prouvai node.property.degree ?e1}",
