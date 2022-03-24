@@ -10,7 +10,7 @@ import {
   Typography,
   Grid,
   Card,
-  Stack, SelectChangeEvent,
+  Stack, SelectChangeEvent, LinearProgress,
 } from '@mui/material';
 import config from '@/config';
 import {useAppDispatch, useAppSelector} from '@/app/hooks';
@@ -26,6 +26,7 @@ export interface IBaseProps {
 
 const Base = (props: IBaseProps) => {
   const {selectedDataset, dataset} = useAppSelector((state) => state.site);
+  const {isLoading} = useAppSelector((state) => state.ui);
   const dispatch = useAppDispatch();
 
   const handleDatasetSelection = (event: SelectChangeEvent<string>) => {
@@ -55,6 +56,9 @@ const Base = (props: IBaseProps) => {
           > ABOUT</Button>
         </ThemeProvider>
       </Toolbar>
+      {isLoading &&
+            <LinearProgress variant={'indeterminate'} sx={{width: '100%', position: 'absolute'}}/>
+      }
     </AppBar>
     <Box>
       <Grid container spacing={2} sx={{height: 'calc(100vh - 48px)', pt: 2, px: 2}}>

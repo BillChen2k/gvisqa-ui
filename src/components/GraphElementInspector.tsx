@@ -1,19 +1,13 @@
 import * as React from 'react';
 import {Box, Card, Grid, Typography} from '@mui/material';
 import {humanize} from 'inflected';
+import inspectorIcons from '@/config/inspector';
 export type IGraphElementType = 'node' | 'edge' | 'graph' | 'community';
-
 export interface IGraphElementInspectorProps {
   type?: IGraphElementType;
   config?: any;
 };
 
-const inspectorIcons = {
-  community: '/img/icon-community.png',
-  edge: '/img/icon-edge.png',
-  node: '/img/icon-node.png',
-  graph: '/img/icon-graph.png',
-};
 
 const demoConfig = {
   semantic: 'Character',

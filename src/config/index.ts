@@ -43,10 +43,6 @@ const config = {
     } as SnackbarOrigin,
     g6CoreHeight: 630,
   },
-  API: '/api',
-  map: {
-    apiToken: 'pk.eyJ1IjoiYmlsbGNoZW4yayIsImEiOiJja3R2MDBwNWgyNDljMnBvMmdzbnU0dTZ5In0.To49SgD0gHYceQ8Ap2BG3g',
-  },
 };
 
 export default config;

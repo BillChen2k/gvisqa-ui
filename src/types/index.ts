@@ -14,7 +14,7 @@ export interface IQAResult {
   readable_answer: string;
   cp: string; // Candidate Path
   query: string;
-  te: any[];
+  tes: any[];
 }
 
 export interface IGraphConfig {
