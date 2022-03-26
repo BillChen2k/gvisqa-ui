@@ -28,7 +28,7 @@ const ArgDataInspector = (props: IAuxiliaryBarChartProps) => {
       'y': {'field': 'entity', 'type': 'ordinal', 'axis': {'labelAngle': 45},
         'sort': qares.answer_type.split('@')[0] == 'max' ? '-x' : 'x',
       },
-      'x': {'field': 'degree', 'type': 'quantitative', 'stack': false},
+      'x': {'field': qares.answer_type.split('@')[1], 'type': 'quantitative', 'stack': false},
     },
     'layer': [
       {
@@ -37,7 +37,8 @@ const ArgDataInspector = (props: IAuxiliaryBarChartProps) => {
       },
       {
         'mark': {'type': 'text', 'align': 'left', 'baseline': 'middle', 'dx': 3},
-        'encoding': {'text': {'field': 'degree', 'type': 'nominal'}},
+        'encoding': {'text': {'field': qares.answer_type.split('@')[1], 'type': 'nominal',
+          'format': '.2f'}},
       },
     ],
   };
@@ -46,8 +47,10 @@ const ArgDataInspector = (props: IAuxiliaryBarChartProps) => {
     return null;
   }
 
+  const maxHeight = 420;
+  const height = Math.min(maxHeight, props.data.length * 15 + 150);
   return (
-    <Card variant={'outlined'} sx={{mb: 2, height: '420px', width: '100%', overflowY: 'scroll'}}>
+    <Card variant={'outlined'} sx={{mb: 2, height: `${height}px`, width: '100%', overflowY: 'scroll'}}>
       <Typography variant={'h6'} sx={{'p': 2}}>
         {humanize(qares.answer_type.split('@')[1]) + ' ' + `rankings (${qares.answer_type.split('@')[0] == 'max' ? 'descending' : 'ascending'})`}
       </Typography>

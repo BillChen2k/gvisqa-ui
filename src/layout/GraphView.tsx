@@ -58,6 +58,14 @@ const div = (props: IdivProps) => {
     );
   }
 
+  let sortedTE: any[] = null;
+  if (qares) {
+    sortedTE = JSON.parse(JSON.stringify(qares.tes));
+    sortedTE.sort((a: any, b:any) => {
+      return a.type == 'community' ? -1 : 1;
+    });
+  }
+
   return (
     <Card variant={'outlined'} sx={{height: '100%'}} >
       <CardContent>
@@ -119,7 +127,7 @@ const div = (props: IdivProps) => {
                   <ArgDataInspector data={JSON.parse(JSON.stringify(qares.arg_data))} />
               }
               { qares &&
-                qares.tes.map((te, index) => {
+                sortedTE.map((te, index) => {
                   if (te.type == 'node' || te.type == 'community') {
                     return (<TEInspector key={index} type={te.type} index={te.index}/>);
                   }

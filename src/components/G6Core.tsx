@@ -16,6 +16,7 @@ const G6Core = (props: IG6CoreProps) => {
   const {selectedDataset, dataset, qares} = useAppSelector((state) => state.site);
   const [graph, setGraph] = React.useState<any>(null);
   const [gdata, setGdata] = React.useState<any>(null);
+  const [currentRenderedGraph, setCurrentRenderedGraph] = React.useState<any>(null);
 
   // Graph config
   const [showLabel, setShowLabel] = React.useState(false);
@@ -31,14 +32,19 @@ const G6Core = (props: IG6CoreProps) => {
    * Graph initialization
    */
   useEffect(() => {
-    if (!graph) {
+    if (!graph || selectedDataset != currentRenderedGraph) {
+
+      if (graph) {
+        graph.destroy();
+      }
+
       const refreshDraggedNodePosition = (e: any) => {
         const model = e.item.get('model');
         model.fx = e.x;
         model.fy = e.y;
       };
 
-      const graph = new G6.Graph({
+      const g = new G6.Graph({
         container: ref.current,
         layout: {
           type: 'force',
@@ -77,7 +83,7 @@ const G6Core = (props: IG6CoreProps) => {
           .then((res) => res.json())
           .then((data) => {
             const gdata = data.graphjson;
-            graph.data(gdata);
+            g.data(gdata);
             gdata.nodes.forEach((i: any, index: number) => {
               i.cluster = i.group;
               i.style = Object.assign(i.style || {}, {
@@ -96,23 +102,24 @@ const G6Core = (props: IG6CoreProps) => {
               };
             });
             setGdata(data.graphjson);
-            graph.render();
+            g.render();
           });
 
-      graph.on('node:dragstart', function(e: any) {
+      g.on('node:dragstart', function(e: any) {
         graph.layout();
         refreshDraggedNodePosition(e);
       });
-      graph.on('node:drag', (e: any) => {
+      g.on('node:drag', (e: any) => {
         const forceLayout = graph.get('layoutController').layoutMethods[0];
         forceLayout.execute();
         refreshDraggedNodePosition(e);
       });
-      graph.on('node:dragend', (e: any) => {
+      g.on('node:dragend', (e: any) => {
         e.item.get('model').fx = null;
         e.item.get('model').fy = null;
       });
-      setGraph(graph);
+      setGraph(g);
+      setCurrentRenderedGraph(selectedDataset);
     } else {
       console.log('graph exist!!!!!');
     }
@@ -130,6 +137,7 @@ const G6Core = (props: IG6CoreProps) => {
 
   useEffect(() => {
     if (!gdata || !graph) return;
+
     graph.updateLayout({
       linkDistance: linkDistance,
       nodeStrength: nodeStrength,
@@ -137,7 +145,7 @@ const G6Core = (props: IG6CoreProps) => {
   }, [nodeStrength, linkDistance]);
 
   useEffect(() => {
-    if (!gdata || !graph) return;
+    if (!gdata || !graph || !qares) return;
 
     graph.getNodes().forEach((node: any) => {
       graph.setItemState(node, 'highlight', false);
@@ -150,8 +158,6 @@ const G6Core = (props: IG6CoreProps) => {
 
     graph.refresh();
     graph.layout();
-
-    if (!qares) return;
 
     // Set new highlights
     const highlight: any = qares.highlight;

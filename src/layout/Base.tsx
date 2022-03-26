@@ -30,6 +30,7 @@ const Base = (props: IBaseProps) => {
   const dispatch = useAppDispatch();
 
   const handleDatasetSelection = (event: SelectChangeEvent<string>) => {
+    dispatch(siteSlice.actions.setQARes(undefined));
     dispatch(siteSlice.actions.setSelectedDataset(event.target.value as string));
   };
 
@@ -42,6 +43,7 @@ const Base = (props: IBaseProps) => {
             onChange={handleDatasetSelection}
           >
             <MenuItem value={'lesmis'}>Les Miserbles</MenuItem>
+            <MenuItem value={'football'}>Football</MenuItem>
           </Select>
           <Typography variant={'h6'} sx={{mx: 2}}>
             GVisQA - Graph Visualization Question Answering
