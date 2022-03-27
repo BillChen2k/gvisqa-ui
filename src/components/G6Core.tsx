@@ -1,10 +1,11 @@
 import * as React from 'react';
-import G6 from '@antv/g6';
+import G6, {ModelStyle} from '@antv/g6';
 import {useEffect, useRef} from 'react';
 import {useAppDispatch, useAppSelector} from '@/app/hooks';
 import {Box, Checkbox, FormControl, FormControlLabel, FormLabel, Slider, Typography} from '@mui/material';
 import chroma from 'chroma-js';
 import config from '@/config';
+import {IDataset} from '@/types';
 
 export interface IG6CoreProps {
 }
@@ -28,12 +29,13 @@ const G6Core = (props: IG6CoreProps) => {
     return chroma.scale('Set1').mode('lch').domain([0, 1]).colors(dataset.community_count)[node.group];
   });
 
+  const directed = dataset.graphconfig.graph.directed;
+
   /**
    * Graph initialization
    */
   useEffect(() => {
     if (!graph || selectedDataset != currentRenderedGraph) {
-
       if (graph) {
         graph.destroy();
       }
@@ -81,14 +83,14 @@ const G6Core = (props: IG6CoreProps) => {
 
       fetch(`/dataset/${selectedDataset}.json`)
           .then((res) => res.json())
-          .then((data) => {
+          .then((data: IDataset) => {
             const gdata = data.graphjson;
             g.data(gdata);
-            gdata.nodes.forEach((i: any, index: number) => {
+            gdata.nodes.forEach((i: ModelStyle, index: number) => {
               i.cluster = i.group;
-              i.style = Object.assign(i.style || {}, {
+              i.style = {...i.style,
                 fill: nodeFills[index],
-              });
+              };
               i.stateStyles = {
                 highlight: {
                   stroke: '#C70000',
@@ -101,16 +103,42 @@ const G6Core = (props: IG6CoreProps) => {
                 },
               };
             });
+            gdata.edges.forEach((e: ModelStyle, index: number) => {
+              console.log(dataset.graphconfig.graph.directed);
+              // e.size = 1 + (e.value || 1 - 1) / 5 || 1;
+              e.style = {...e.style,
+                stroke: '#555555',
+                strokeOpacity: 0.25,
+                // @ts-ignore
+                lineWidth: 1 + (e.value || 1 - 1) / 5 || 1,
+                endArrow: data.graphconfig.graph.directed ? {
+                  path: G6.Arrow.triangle(5, 5, 5),
+                  d: 5,
+                  fill: '#555555',
+                } : false,
+              };
+              e.stateStyles = {
+                highlight: {
+                  stroke: '#C70000',
+                  strokeOpacity: 1,
+                  // @ts-ignore
+                  lineWidth: 1 + (e.value || 1 - 1) / 5 || 1,
+                  shadowBlur: 20,
+                  shadowColor: '#C70000',
+                },
+              };
+            });
+
             setGdata(data.graphjson);
             g.render();
           });
 
       g.on('node:dragstart', function(e: any) {
-        graph.layout();
+        g.layout();
         refreshDraggedNodePosition(e);
       });
       g.on('node:drag', (e: any) => {
-        const forceLayout = graph.get('layoutController').layoutMethods[0];
+        const forceLayout = g.get('layoutController').layoutMethods[0];
         forceLayout.execute();
         refreshDraggedNodePosition(e);
       });
@@ -151,6 +179,10 @@ const G6Core = (props: IG6CoreProps) => {
       graph.setItemState(node, 'highlight', false);
     });
 
+    graph.getEdges().forEach((edge: any, index: number) => {
+      graph.setItemState(edge, 'highlight', false);
+    });
+
     gdata.nodes.forEach((node: any) => {
       node.size = nodeSize;
       node.label = showLabel ? node.name : '';
@@ -170,7 +202,22 @@ const G6Core = (props: IG6CoreProps) => {
           gdata.nodes[one].label = gdata.nodes[one].name;
         });
       }
+      if (highlight.type == 'edge') {
+        highlight.edge_index.forEach((one: any) => {
+          const highlightEdge = graph.getEdges().filter((e: any) => {
+            return e.getModel().source == one.source && e.getModel().target == one.target;
+          });
+          if (highlightEdge.length > 0) {
+            graph.setItemState(highlightEdge[0], 'highlight', true);
+            // Display name of the edge
+            gdata.nodes[one.source].label = gdata.nodes[one.source].name;
+            gdata.nodes[one.target].label = gdata.nodes[one.target].name;
+          }
+        });
+      }
     }
+
+    // graph.setItemState(graph.getEdges()[1], 'highlight', true);
 
     graph.refresh();
     graph.layout();

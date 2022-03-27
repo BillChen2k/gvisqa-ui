@@ -86,11 +86,17 @@ const TEInspector = (props: ITEInspectorProps) => {
     case 'edge':
     {
       const target = dataset.properties.edge[String(props.source)][String(props.target)];
-      title = `Edge from ${dataset.graphjson.nodes[props.source].name} to ${dataset.graphjson.nodes[props.target].name}`;
+      title = `Edge connecting ${dataset.graphjson.nodes[props.source].name} and ${dataset.graphjson.nodes[props.target].name}`;
       tableContents.push((
         <div className={'split-row'}>
           <span>Weight</span>
           <span>{target.weight}</span>
+        </div>
+      ));
+      tableContents.push((
+        <div className={'split-row'}>
+          <span>Directed</span>
+          <span>{dataset.graphconfig.graph.directed}</span>
         </div>
       ));
     }

@@ -34,6 +34,24 @@ const Base = (props: IBaseProps) => {
     dispatch(siteSlice.actions.setSelectedDataset(event.target.value as string));
   };
 
+  const datasetItems: any = {
+    'lesmis': 'Lesmis',
+    'football': 'Football',
+    'dolphins': 'Dolphins',
+    'celegansneural': 'Celegansneural',
+    'adjnoun': 'Adjnoun',
+    'as-22july06': 'AS-22july06',
+    'astro-ph': 'Astro-Ph',
+    'cond-mat': 'Cond-Mat',
+    'cond-mat-2003': 'Cond-Mat-2003',
+    'cond-mat-2005': 'Cond-Mat-2005',
+    'hep-th': 'Hep-Th',
+    'karate': 'Karate',
+    'netscience': 'NetScience',
+    'polblogs': 'PolBlogs',
+    'polbooks': 'PolBooks',
+    'power': 'Power',
+  };
   return (<Box>
     <AppBar position={'static'}>
       <Toolbar variant={'dense'}>
@@ -42,8 +60,9 @@ const Base = (props: IBaseProps) => {
           <Select variant={'standard'} value={selectedDataset} size={'small'}
             onChange={handleDatasetSelection}
           >
-            <MenuItem value={'lesmis'}>Les Miserbles</MenuItem>
-            <MenuItem value={'football'}>Football</MenuItem>
+            {Object.keys(datasetItems).map((value: string) => {
+              return <MenuItem key={value} value={value}>{datasetItems[value]}</MenuItem>;
+            })}
           </Select>
           <Typography variant={'h6'} sx={{mx: 2}}>
             GVisQA - Graph Visualization Question Answering

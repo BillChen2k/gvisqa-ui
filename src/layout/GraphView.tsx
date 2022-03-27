@@ -10,11 +10,11 @@ import config from '@/config';
 import TEInspector from '@/components/TEInspector';
 import ArgDataInspector from '@/components/ArgDataInspector';
 
-export interface IdivProps {
+export interface IGraphViewProps {
 
 }
 
-const div = (props: IdivProps) => {
+const GraphView = (props: IGraphViewProps) => {
   const dispatch = useAppDispatch();
   const {dataset, qares} = useAppSelector((state) => state.site);
 
@@ -33,10 +33,12 @@ const div = (props: IdivProps) => {
         return q.question.trim().toLowerCase().replace(/\s+/g, '').includes(queryQuestion);
       });
       if (queryResult.length > 0) {
-        dispatch(uiSlice.actions.openSnackbar({
-          message: `${queryResult[0].question}`,
-          severity: 'success',
-        }));
+        // dispatch(uiSlice.actions.openSnackbar({
+        //   message: `${queryResult[0].question}`,
+        //   severity: 'success',
+        // }));
+        console.log(queryResult[0].question);
+        console.log(queryQuestion[0]);
         dispatch(siteSlice.actions.setQARes(queryResult[0]));
       } else {
         dispatch(uiSlice.actions.openSnackbar({
@@ -141,4 +143,4 @@ const div = (props: IdivProps) => {
   );
 };
 
-export default div;
+export default GraphView;
