@@ -31,6 +31,7 @@ const G6Core = (props: IG6CoreProps) => {
 
   const directed = dataset.graphconfig.graph.directed;
 
+
   /**
    * Graph initialization
    */
@@ -40,51 +41,84 @@ const G6Core = (props: IG6CoreProps) => {
         graph.destroy();
       }
 
-      const refreshDraggedNodePosition = (e: any) => {
-        const model = e.item.get('model');
-        model.fx = e.x;
-        model.fy = e.y;
-      };
-
-      const g = new G6.Graph({
-        container: ref.current,
-        layout: {
-          type: 'force',
-          preventOverlap: true,
-          linkDistance: linkDistance,
-          nodeStrength: nodeStrength,
-          clustering: true,
-          clusterNodeStrength: -5,
-          nodeSpacing: 5,
-        },
-        modes: {
-          default: ['zoom-canvas', 'drag-canvas', 'drag-node'],
-        },
-        width: ref.current.clientWidth,
-        height: GRAPH_HEIGHT,
-        defaultNode: {
-          size: nodeSize,
-          label: '',
-          labelCfg: {
-            position: 'right',
-            style: {
-              fill: '#000000',
-              opacity: 0.8,
-              fontSize: 12,
-              fontFamily: 'PragmataPro',
-            },
-          },
-          style: {
-            fill: chroma.random().hex(),
-            strokeOpacity: 0,
-          },
-        },
-      });
 
       fetch(`/dataset/${selectedDataset}.json`)
           .then((res) => res.json())
           .then((data: IDataset) => {
             const gdata = data.graphjson;
+            const refreshDraggedNodePosition = (e: any) => {
+              const model = e.item.get('model');
+              model.fx = e.x;
+              model.fy = e.y;
+            };
+
+            const tooltip = new G6.Tooltip({
+              offsetX: 10,
+              offsetY: 10,
+              fixToNode: [1, 0.5],
+              itemTypes: ['node', 'edge'],
+              getContent: (e) => {
+                const outDiv = document.createElement('div');
+                const model = e.item.getModel();
+                outDiv.style.width = 'fit-content';
+                outDiv.style.height = 'fit-content';
+                if (e.item.getType() === 'node') {
+                  // @ts-ignore
+                  const properties: any = data.properties.node[String(model.id)];
+                  let content = `<div><b>${model.name}</b></div>`;
+                  content += `<div>Degree: ${properties.degree}</div>`;
+                  content += `<div>Clustering: ${Number(properties.clustering).toFixed(2)}</div>`;
+                  content += `<div>Degree Centrality: ${Number(properties.degree_centrality).toFixed(2)}</div>`;
+                  outDiv.innerHTML = content;
+                } else {
+                  let properties = data.properties.edge[String(model.source)][String(model.target)];
+                  if (!properties) {
+                    properties = data.properties.edge[String(model.target)][String(model.source)];
+                  }
+                  let content = `<div><b>${properties.from_name} - ${properties.to_name}</b></div>`;
+                  content += `<div>Weight: ${model.value}</div>`;
+                  outDiv.innerHTML = content;
+                }
+                return outDiv;
+              },
+            });
+
+            const g = new G6.Graph({
+              container: ref.current,
+              layout: {
+                type: 'force',
+                preventOverlap: true,
+                linkDistance: linkDistance,
+                nodeStrength: nodeStrength,
+                clustering: true,
+                clusterNodeStrength: -5,
+                nodeSpacing: 5,
+              },
+              plugins: [tooltip],
+              modes: {
+                default: ['zoom-canvas', 'drag-canvas', 'drag-node'],
+              },
+              width: ref.current.clientWidth,
+              height: GRAPH_HEIGHT,
+              defaultNode: {
+                size: nodeSize,
+                label: '',
+                labelCfg: {
+                  position: 'right',
+                  style: {
+                    fill: '#000000',
+                    opacity: 0.8,
+                    fontSize: 12,
+                    fontFamily: 'PragmataPro',
+                  },
+                },
+                style: {
+                  fill: chroma.random().hex(),
+                  strokeOpacity: 0,
+                },
+              },
+            });
+
             g.data(gdata);
             gdata.nodes.forEach((i: ModelStyle, index: number) => {
               i.cluster = i.group;
@@ -129,24 +163,25 @@ const G6Core = (props: IG6CoreProps) => {
               };
             });
 
+            g.on('node:dragstart', function(e: any) {
+              g.layout();
+              refreshDraggedNodePosition(e);
+            });
+            g.on('node:drag', (e: any) => {
+              const forceLayout = g.get('layoutController').layoutMethods[0];
+              forceLayout.execute();
+              refreshDraggedNodePosition(e);
+            });
+            g.on('node:dragend', (e: any) => {
+              e.item.get('model').fx = null;
+              e.item.get('model').fy = null;
+            });
+            setGraph(g);
+
             setGdata(data.graphjson);
             g.render();
           });
 
-      g.on('node:dragstart', function(e: any) {
-        g.layout();
-        refreshDraggedNodePosition(e);
-      });
-      g.on('node:drag', (e: any) => {
-        const forceLayout = g.get('layoutController').layoutMethods[0];
-        forceLayout.execute();
-        refreshDraggedNodePosition(e);
-      });
-      g.on('node:dragend', (e: any) => {
-        e.item.get('model').fx = null;
-        e.item.get('model').fy = null;
-      });
-      setGraph(g);
       setCurrentRenderedGraph(selectedDataset);
     } else {
       console.log('graph exist!!!!!');
