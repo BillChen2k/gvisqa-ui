@@ -38,7 +38,7 @@ const ArgDataInspector = (props: IAuxiliaryBarChartProps) => {
       {
         'mark': {'type': 'text', 'align': 'left', 'baseline': 'middle', 'dx': 3},
         'encoding': {'text': {'field': qares.answer_type.split('@')[1], 'type': 'nominal',
-          'format': '.2f'}},
+          'format': '.4f'}},
       },
     ],
   };

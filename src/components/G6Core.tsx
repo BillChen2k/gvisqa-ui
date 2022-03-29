@@ -21,13 +21,10 @@ const G6Core = (props: IG6CoreProps) => {
 
   // Graph config
   const [showLabel, setShowLabel] = React.useState(false);
+  const [isStatic, setIsStatic] = React.useState(false);
   const [nodeSize, setNodeSize] = React.useState(10);
   const [linkDistance, setLinkDistance] = React.useState(60);
-  const [nodeStrength, setNodeStrength] = React.useState( -30);
-
-  const nodeFills = dataset.graphjson.nodes.map((node: any) => {
-    return chroma.scale('Set1').mode('lch').domain([0, 1]).colors(dataset.community_count)[node.group];
-  });
+  const [nodeStrength, setNodeStrength] = React.useState( 30);
 
   const directed = dataset.graphconfig.graph.directed;
 
@@ -41,16 +38,23 @@ const G6Core = (props: IG6CoreProps) => {
         graph.destroy();
       }
 
-
       fetch(`/dataset/${selectedDataset}.json`)
           .then((res) => res.json())
           .then((data: IDataset) => {
             const gdata = data.graphjson;
+
             const refreshDraggedNodePosition = (e: any) => {
               const model = e.item.get('model');
               model.fx = e.x;
               model.fy = e.y;
+              model.x = e.x;
+              model.y = e.y;
             };
+
+            const scale = chroma.scale('Set1').mode('lch').domain([0, 1]).colors(data.community_count);
+            const nodeFills = data.graphjson.nodes.map((node: any) => {
+              return scale[node.group];
+            });
 
             const tooltip = new G6.Tooltip({
               offsetX: 10,
@@ -67,8 +71,10 @@ const G6Core = (props: IG6CoreProps) => {
                   const properties: any = data.properties.node[String(model.id)];
                   let content = `<div><b>${model.name}</b></div>`;
                   content += `<div>Degree: ${properties.degree}</div>`;
-                  content += `<div>Clustering: ${Number(properties.clustering).toFixed(2)}</div>`;
-                  content += `<div>Degree Centrality: ${Number(properties.degree_centrality).toFixed(2)}</div>`;
+                  content += `<div>Clustering: ${Number(properties.clustering).toFixed(4)}</div>`;
+                  content += `<div>Degree Centrality: ${Number(properties.degree_centrality).toFixed(4)}</div>`;
+                  content += `<div>Within Community: ${model.group}</div>`;
+
                   outDiv.innerHTML = content;
                 } else {
                   let properties = data.properties.edge[String(model.source)][String(model.target)];
@@ -88,15 +94,19 @@ const G6Core = (props: IG6CoreProps) => {
               layout: {
                 type: 'force',
                 preventOverlap: true,
+                // gravity: 10,
                 linkDistance: linkDistance,
-                nodeStrength: nodeStrength,
-                clustering: true,
-                clusterNodeStrength: -5,
-                nodeSpacing: 5,
+                nodeStrength: -nodeStrength,
+                // clustering: true,
+                // clusterNodeStrength: -5,
+                // nodeSpacing: 5,
+                // workerEnabled: true,
+                gpuEnabled: true,
+                maxIteration: 50,
               },
               plugins: [tooltip],
               modes: {
-                default: ['zoom-canvas', 'drag-canvas', 'drag-node'],
+                default: ['zoom-canvas', 'drag-canvas'],
               },
               width: ref.current.clientWidth,
               height: GRAPH_HEIGHT,
@@ -113,7 +123,6 @@ const G6Core = (props: IG6CoreProps) => {
                   },
                 },
                 style: {
-                  fill: chroma.random().hex(),
                   strokeOpacity: 0,
                 },
               },
@@ -121,7 +130,6 @@ const G6Core = (props: IG6CoreProps) => {
 
             g.data(gdata);
             gdata.nodes.forEach((i: ModelStyle, index: number) => {
-              i.cluster = i.group;
               i.style = {...i.style,
                 fill: nodeFills[index],
               };
@@ -163,6 +171,16 @@ const G6Core = (props: IG6CoreProps) => {
               };
             });
 
+            // g.on('node:dragstart', function(e) {
+            //   const forceLayout = g.get('layoutController').layoutMethods[0];
+            //   forceLayout.stop();
+            // });
+            //
+            // g.on('node:drag', function(e) {
+            //   refreshDraggedNodePosition(e);
+            //   g.layout();
+            // });
+
             g.on('node:dragstart', function(e: any) {
               g.layout();
               refreshDraggedNodePosition(e);
@@ -197,6 +215,16 @@ const G6Core = (props: IG6CoreProps) => {
     graph.refresh();
     graph.layout();
   }, [showLabel, nodeSize]);
+
+  useEffect(() => {
+    if (!gdata || !graph) return;
+    const forceLayout = graph.get('layoutController').layoutMethods[0];
+    if (isStatic) {
+      forceLayout.stop();
+    } else {
+      forceLayout.start();
+    }
+  }, [isStatic]);
 
   useEffect(() => {
     if (!gdata || !graph) return;
@@ -236,9 +264,14 @@ const G6Core = (props: IG6CoreProps) => {
           gdata.nodes[one].size = 1.5 * nodeSize;
           gdata.nodes[one].label = gdata.nodes[one].name;
         });
+        const focusItem = graph.getNodes()[highlightNode[0]];
+        graph.focusItem(focusItem, true, {
+          easing: 'easeCubic',
+          duration: 600,
+        });
       }
       if (highlight.type == 'edge') {
-        highlight.edge_index.forEach((one: any) => {
+        highlight.edge_index.forEach((one: any, index: number) => {
           const highlightEdge = graph.getEdges().filter((e: any) => {
             return e.getModel().source == one.source && e.getModel().target == one.target;
           });
@@ -247,9 +280,25 @@ const G6Core = (props: IG6CoreProps) => {
             // Display name of the edge
             gdata.nodes[one.source].label = gdata.nodes[one.source].name;
             gdata.nodes[one.target].label = gdata.nodes[one.target].name;
+            if (index == 0) {
+              const focusItem = highlightEdge[0];
+              graph.focusItem(focusItem, true, {
+                easing: 'easeCubic',
+                duration: 600,
+              });
+            }
           }
         });
       }
+      setTimeout(() => {
+        graph.zoomTo(1.5, {
+          x: ref.current.clientWidth / 2,
+          y: ref.current.clientHeight / 2,
+        }, true, {
+          easing: 'easeCubic',
+          duration: 500,
+        });
+      }, 700);
     }
 
     // graph.setItemState(graph.getEdges()[1], 'highlight', true);
@@ -267,13 +316,18 @@ const G6Core = (props: IG6CoreProps) => {
             <Checkbox size={'small'} checked={showLabel} onChange={(e) => setShowLabel(e.target.checked)} />
           } label={'Show Label'} />
         </Box>
+        {/* <Box>*/}
+        {/*  <FormControlLabel control={*/}
+        {/*    <Checkbox size={'small'} checked={isStatic} onChange={(e) => setIsStatic(e.target.checked)} />*/}
+        {/*  } label={'Static Layout'} />*/}
+        {/* </Box>*/}
         <Typography variant="body2">Node Size ({nodeSize}):</Typography>
         <Slider size={'small'}
           value={nodeSize} min={2} max={30} onChange={(event, value) => setNodeSize(value as number)} />
-        <Typography variant="body2">Node Strength ({nodeStrength.toFixed(2)}):</Typography>
+        <Typography variant="body2">Node Strength ({nodeStrength.toFixed(4)}):</Typography>
         <Slider size={'small'}
-          value={-nodeStrength} min={-20} max={150} onChange={(event, value) => setNodeStrength(-value as number)} />
-        <Typography variant="body2">Link Distance ({linkDistance.toFixed(2)}):</Typography>
+          value={nodeStrength} min={-50} max={50} onChange={(event, value) => setNodeStrength(value as number)} />
+        <Typography variant="body2">Link Distance ({linkDistance.toFixed(4)}):</Typography>
         <Slider size={'small'}
           value={linkDistance} min={5} max={300} onChange={(event, value) => setLinkDistance(value as number)} />
       </Box>

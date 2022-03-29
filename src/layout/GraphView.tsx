@@ -66,6 +66,7 @@ const GraphView = (props: IGraphViewProps) => {
     sortedTE.sort((a: any, b:any) => {
       return a.type == 'community' ? -1 : 1;
     });
+    sortedTE.splice(100);
   }
 
   return (
@@ -132,6 +133,9 @@ const GraphView = (props: IGraphViewProps) => {
                 sortedTE.map((te, index) => {
                   if (te.type == 'node' || te.type == 'community') {
                     return (<TEInspector key={index} type={te.type} index={te.index}/>);
+                  }
+                  if (te.type == 'edge') {
+                    return (<TEInspector key={index} type={te.type} source={te.source} target={te.target}/>);
                   }
                 })
               }

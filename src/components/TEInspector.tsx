@@ -35,7 +35,15 @@ const TEInspector = (props: ITEInspectorProps) => {
               <span>{dataset.graphjson.nodes[props.index].group}</span>
             </div>,
         );
-        ['degree', 'clustering', 'degree_centrality'].forEach((one, index) => {
+        ['degree', ...(dataset.graphconfig.graph.directed ? ['in_degree', 'out_degree'] : [])].forEach((key) => {
+          tableContents.push(
+              <div className={'split-row'}>
+                <span>{humanize(key)}</span>
+                <span>{target[key]}</span>
+              </div>,
+          );
+        });
+        ['clustering', 'degree_centrality'].forEach((one, index) => {
           if (target[one]) {
             tableContents.push(
                 <div key={index} className={'split-row'}>
@@ -86,7 +94,7 @@ const TEInspector = (props: ITEInspectorProps) => {
     case 'edge':
     {
       const target = dataset.properties.edge[String(props.source)][String(props.target)];
-      title = `Edge connecting ${dataset.graphjson.nodes[props.source].name} and ${dataset.graphjson.nodes[props.target].name}`;
+      title = `${dataset.graphjson.nodes[props.source].name} and ${dataset.graphjson.nodes[props.target].name}`;
       tableContents.push((
         <div className={'split-row'}>
           <span>Weight</span>
@@ -95,8 +103,20 @@ const TEInspector = (props: ITEInspectorProps) => {
       ));
       tableContents.push((
         <div className={'split-row'}>
-          <span>Directed</span>
-          <span>{dataset.graphconfig.graph.directed}</span>
+          <span>Source</span>
+          <span>{dataset.graphjson.nodes[props.source].name}</span>
+        </div>
+      ));
+      tableContents.push((
+        <div className={'split-row'}>
+          <span>Target</span>
+          <span>{dataset.graphjson.nodes[props.target].name}</span>
+        </div>
+      ));
+      tableContents.push((
+        <div className={'split-row'}>
+          <span>Is directed</span>
+          <span>{dataset.graphconfig.graph.directed ? 'Yes' : 'No'}</span>
         </div>
       ));
     }

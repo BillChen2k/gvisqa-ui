@@ -39,7 +39,8 @@ const GraphMetaView = (props: IGraphMetaViewProps) => {
         <Stack p={2} spacing={1}>
           <Typography variant={'h4'}>{dataset.full_name}</Typography>
           <Typography variant={'body2'} sx={{color: 'gray'}}>
-            Node: {dataset.node_count}, Edges: {dataset.edge_count}, {dataset.graphconfig.graph.directed ? 'Directed' : 'Undirected'}
+            {/*Node: {dataset.node_count}, Edges: {dataset.edge_count},*/}
+            {dataset.graphconfig.graph.directed ? 'Directed' : 'Undirected'}
           </Typography>
           <Typography variant={'body1'} sx={{height: 'auto'}}>
             {dataset.description}
@@ -54,7 +55,7 @@ const GraphMetaView = (props: IGraphMetaViewProps) => {
         </Box>
         <Stack direction={'row'} sx={{m: 2}} spacing={2} justifyContent={'right'}>
           <Button variant={'outlined'}>
-              Change Graph Configuration
+              View Config YML File
           </Button>
           {/*<Button variant={'outlined'}>*/}
           {/*    Load*/}

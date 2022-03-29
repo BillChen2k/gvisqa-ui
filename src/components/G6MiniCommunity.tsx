@@ -7,6 +7,7 @@ import {useAppSelector} from '@/app/hooks';
 
 export interface IG6MiniCommunityProps {
   community: number | string;
+  color?: string;
 }
 
 

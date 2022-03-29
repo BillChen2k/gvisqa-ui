@@ -65,7 +65,7 @@ const Base = (props: IBaseProps) => {
             })}
           </Select>
           <Typography variant={'h6'} sx={{mx: 2}}>
-            GVisQA - Graph Visualization Question Answering
+            GVQA - Graph Visualization Question Answering
           </Typography>
           <Box sx={{flexGrow: 1}} />
           <Button onClick={() => {
