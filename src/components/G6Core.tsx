@@ -2,7 +2,7 @@ import * as React from 'react';
 import G6, {ModelStyle} from '@antv/g6';
 import {useEffect, useRef} from 'react';
 import {useAppDispatch, useAppSelector} from '@/app/hooks';
-import {Box, Checkbox, FormControl, FormControlLabel, FormLabel, Slider, Typography} from '@mui/material';
+import {Box, Button, Checkbox, FormControl, FormControlLabel, FormLabel, Slider, Typography} from '@mui/material';
 import chroma from 'chroma-js';
 import config from '@/config';
 import {IDataset} from '@/types';
@@ -236,7 +236,8 @@ const G6Core = (props: IG6CoreProps) => {
   }, [nodeStrength, linkDistance]);
 
   useEffect(() => {
-    if (!gdata || !graph || !qares) return;
+
+    if (!gdata || !graph) return;
 
     graph.getNodes().forEach((node: any) => {
       graph.setItemState(node, 'highlight', false);
@@ -253,6 +254,8 @@ const G6Core = (props: IG6CoreProps) => {
 
     graph.refresh();
     graph.layout();
+
+    if (!qares) return;
 
     // Set new highlights
     const highlight: any = qares.highlight;
@@ -330,6 +333,12 @@ const G6Core = (props: IG6CoreProps) => {
         <Typography variant="body2">Link Distance ({linkDistance.toFixed(4)}):</Typography>
         <Slider size={'small'}
           value={linkDistance} min={5} max={300} onChange={(event, value) => setLinkDistance(value as number)} />
+        <Button variant={'outlined'} size={'small'}
+          onClick={() => {
+            graph.downloadFullImage('graph');
+          }}>
+          Download Graph
+        </Button>
       </Box>
     </Box>
   );

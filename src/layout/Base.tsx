@@ -81,7 +81,7 @@ const Base = (props: IBaseProps) => {
             <LinearProgress variant={'indeterminate'} sx={{width: '100%', position: 'absolute'}}/>
       }
     </AppBar>
-    <Box>
+    <Box sx={{mb: 2}}>
       <Grid container spacing={2} sx={{height: 'calc(100vh - 48px)', pt: 2, px: 2}}>
         <Grid item xs={3}>
           <GraphMetaView />

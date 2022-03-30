@@ -34,7 +34,7 @@ const GraphMetaView = (props: IGraphMetaViewProps) => {
   }
 
   return (
-    <Card variant={'outlined'} sx={{height: '100%'}}>
+    <Card variant={'outlined'} sx={{height: '98%'}}>
       <Stack direction={'column'} sx={{display: 'flex', height: '100%'}}>
         <Stack p={2} spacing={1}>
           <Typography variant={'h4'}>{dataset.full_name}</Typography>
@@ -46,14 +46,14 @@ const GraphMetaView = (props: IGraphMetaViewProps) => {
             {dataset.description}
           </Typography>
         </Stack>
-        <Box px={2} sx={{overflowX: 'hidden', overflowY: 'scroll', height: 'calc(100vh - 320px)'}}>
+        <Box px={2} sx={{overflowX: 'hidden', overflowY: 'scroll', height: 'calc(100vh - 290px)'}}>
           <GraphElementInspector type={'node'} config={dataset.graphconfig.node} />
           <GraphElementInspector type={'edge'} config={dataset.graphconfig.edge} />
           <GraphElementInspector type={'community'} config={dataset.graphconfig.community} />
 
           <GraphElementInspector type={'graph'} config={dataset.graphconfig.graph}/>
         </Box>
-        <Stack direction={'row'} sx={{m: 2}} spacing={2} justifyContent={'right'}>
+        <Stack direction={'row'} sx={{mx: 2, mt: 2}} spacing={2} justifyContent={'right'}>
           <Button variant={'outlined'}>
               View Config YML File
           </Button>

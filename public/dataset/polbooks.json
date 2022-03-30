@@ -1,7 +1,7 @@
 {
     "name": "polbooks",
     "full_name": "Polbooks",
-    "description": "books about US politics sold by the online bookseller Amazon.com.",
+    "description": "Books about US politics sold by the online bookseller Amazon.com, 2005.",
     "edge_count": 441,
     "node_count": 105,
     "community_count": 4,

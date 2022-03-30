@@ -70,7 +70,7 @@ const GraphView = (props: IGraphViewProps) => {
   }
 
   return (
-    <Card variant={'outlined'} sx={{height: '100%'}} >
+    <Card variant={'outlined'} sx={{height: '98%'}} >
       <CardContent>
         <Grid container spacing={2}>
           <Grid item xs={8}>
@@ -108,7 +108,7 @@ const GraphView = (props: IGraphViewProps) => {
             </Box>
 
             {qares &&
-              <Card variant={'outlined'} sx={{pt: 1}}>
+              <Card variant={'outlined'} sx={{mt: 5}}>
                 <CardContent>
                   <Typography variant={'body2'}>Our answer:</Typography>
                   <Typography variant={'h3'}>{humanize(qares.readable_answer)}</Typography>
@@ -125,7 +125,8 @@ const GraphView = (props: IGraphViewProps) => {
           </Grid>
 
           <Grid item xs={4}>
-            <Box sx={{width: '100%', height: 'calc(100vh - 110px)', overflowY: 'auto'}}>
+            <Card variant={'outlined'}
+              sx={{p: 1, width: '100%', height: 'calc(100vh - 119px)', overflowY: 'auto', overflowX: 'hidden'}}>
               { qares && qares.arg_data.length > 0 &&
                   <ArgDataInspector data={JSON.parse(JSON.stringify(qares.arg_data))} />
               }
@@ -139,7 +140,7 @@ const GraphView = (props: IGraphViewProps) => {
                   }
                 })
               }
-            </Box>
+            </Card>
           </Grid>
         </Grid>
       </CardContent>

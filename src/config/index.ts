@@ -41,7 +41,7 @@ const config = {
       vertical: 'bottom',
       horizontal: 'right',
     } as SnackbarOrigin,
-    g6CoreHeight: 700,
+    g6CoreHeight: 640,
   },
 };
 
